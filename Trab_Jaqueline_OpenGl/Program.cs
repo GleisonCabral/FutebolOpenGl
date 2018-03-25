@@ -15,8 +15,8 @@ namespace Trab_Jaqueline_OpenGl
 
         static float ponto , raio ,x, y;
         const float PI = 3.14159265358f;
+        static float[] Novacor;
         #endregion
-
 
         static void Main(string[] args)
         {
@@ -158,58 +158,55 @@ namespace Trab_Jaqueline_OpenGl
 
         }
 
-        static void jogador( float tx, float ty)
-        {
-            
-            //corpo
-            Gl.glColor3f(0f, 0.0f, 0f);
-            Gl.glBegin(Gl.GL_QUADS);
-            Gl.glVertex2f(tx, ty);
-            Gl.glVertex2f((tx + 0.05f), ty);
-            Gl.glVertex2f((tx + 0.05f), (ty + 0.025f));
-            Gl.glVertex2f(tx, (ty + 0.025f));
-            Gl.glEnd();
-
-            //
-
-            float auxX,auxY;
-            auxX= tx + ((tx+0.05f)-tx)/ 2;
-            auxY = (ty + 0.055f);
-            ponto = (2 * PI) / 500;
-            raio = 0.033f;
-            Gl.glColor3f(1f, 0f, 0f);
-            Gl.glBegin(Gl.GL_TRIANGLE_FAN);
-            Gl.glVertex2f(auxX, auxY);
-            for (float angulo = 0; angulo < (2 * PI); angulo += ponto)
-            {
-                x = (float)(raio * Math.Cos(angulo) + auxX);
-                y = (float)(raio * Math.Sin(angulo) + auxY);
-                Gl.glVertex2f(x, y);
-            }
-            Gl.glEnd();
-        }
-
         static void desenhar()
         {
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
             cenaCampo();
+            Novacor = new float[3] { 0.67f, 0.85f, 1f };
+            Jogadores(12,Novacor,0.07f,0.47f);
+            Novacor = new float[3] { 1.0f, 0.87f, 0f };
+            Jogadores(12, Novacor, 0.07f, 0.87f);
             Glut.glutSwapBuffers();
         }
 
-        static void desenharJogadores(int quantidade)
+        static void Jogadores(int quantidade,float[] cor, float valueMin, float valueMax)
         {
             
             int cont = 0;
-            float x, y;
+            float tx, ty;
             Random randon = new Random();
             do
             {
 
-                x = (float)randon.NextDouble(0.07f,0.87f);
+                tx = (float)randon.NextDouble(valueMin,valueMax);
+                ty = (float)randon.NextDouble(0.07f, 0.87f);
 
-                y = (float)randon.NextDouble(0.07f, 0.87f);
+                //corpo
+                Gl.glColor3f(0f, 0.0f, 0f);
+                Gl.glBegin(Gl.GL_QUADS);
+                Gl.glVertex2f(tx, ty);
+                Gl.glVertex2f((tx + 0.05f), ty);
+                Gl.glVertex2f((tx + 0.05f), (ty + 0.025f));
+                Gl.glVertex2f(tx, (ty + 0.025f));
+                Gl.glEnd();
 
-                jogador(x, y);
+                //Cabeça
+
+                float auxX, auxY;
+                auxX = tx + ((tx + 0.05f) - tx) / 2;
+                auxY = (ty + 0.055f);
+                ponto = (2 * PI) / 500;
+                raio = 0.033f;
+                Gl.glColor3f(cor[0],cor[1], cor[2]);
+                Gl.glBegin(Gl.GL_TRIANGLE_FAN);
+                Gl.glVertex2f(auxX, auxY);
+                for (float angulo = 0; angulo < (2 * PI); angulo += ponto)
+                {
+                    x = (float)(raio * Math.Cos(angulo) + auxX);
+                    y = (float)(raio * Math.Sin(angulo) + auxY);
+                    Gl.glVertex2f(x, y);
+                }
+                Gl.glEnd();
                 cont++;
             } while (cont<=quantidade);
         }
