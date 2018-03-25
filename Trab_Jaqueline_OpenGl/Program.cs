@@ -12,10 +12,11 @@ namespace Trab_Jaqueline_OpenGl
     class Program
     {
         #region Variaveis de configuração do centro do campo
-        static float ponto, raio, x, y;
-        const float PI = 3.14159265358f;
-        static float[] Novacor;
-        static float gbPosy = 0.0f;
+        static float ponto, raio, x, y;     // Variaveis do valor de ponto, raio e posição.@@
+        const float PI = 3.14159265358f;    // Variavel valor do PI, para as circunferências.@@
+        static float[] Novacor;             // Vetor para nova cor.@@
+        static float gbPosy = 0.0f;         // Posição do goleiro do Brasil.@@
+        static float gaPosy = 0.0f;         // Posição do goleiro da Alemanha.@@
         #endregion
 
         static void Main(string[] args)
@@ -29,6 +30,7 @@ namespace Trab_Jaqueline_OpenGl
             inicialize();
             Glut.glutDisplayFunc(desenhar);
             Glut.glutSpecialFunc(moverGoleiroBrasil);
+            Glut.glutKeyboardFunc(new Glut.KeyboardCallback(moverGoleiroAlemanha));
             Glut.glutMainLoop();
         }
 
@@ -138,13 +140,13 @@ namespace Trab_Jaqueline_OpenGl
             Gl.glVertex2f(0.05f, 0.65f);
             Gl.glEnd();
             
-            //Jogadores da Alemanha
-            Novacor = new float[3] { 0.87f, 0f, 0f };
-            Jogadores(2, Novacor, 0.06f, 0.75f);
+            ////Jogadores da Alemanha
+            //Novacor = new float[3] { 0.87f, 0f, 0f };
+            //Jogadores(2, Novacor, 0.06f, 0.75f);
 
-            //Jogadores do Brasil
-            Novacor = new float[3] { 1f, 0.87f, 0f };
-            Jogadores(2, Novacor, 0.25f, 0.87f);
+            ////Jogadores do Brasil
+            //Novacor = new float[3] { 1f, 0.87f, 0f };
+            //Jogadores(2, Novacor, 0.25f, 0.87f);
 
             //Gol direito
             Gl.glLineWidth(15);
@@ -153,7 +155,6 @@ namespace Trab_Jaqueline_OpenGl
             Gl.glVertex2f(0.95f, 0.35f);
             Gl.glVertex2f(0.95f, 0.65f);
             Gl.glEnd();
-
 
         }
 
@@ -173,7 +174,7 @@ namespace Trab_Jaqueline_OpenGl
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
             cenaCampo();
             Novacor = new float[3] { 0.87f, 0f, 0f };
-            goleiroAlemanha(0f, Novacor);
+            goleiroAlemanha(Novacor);
             Novacor = new float[3] { 1f, 0.87f, 0f };
             goleiroBrasil(Novacor);
             Glut.glutSwapBuffers();
@@ -210,12 +211,12 @@ namespace Trab_Jaqueline_OpenGl
             Gl.glEnd();
         }
 
-        static void goleiroAlemanha(float Posy, float[] cor)
+        static void goleiroAlemanha(float[] cor)
         {
             const float tx = 0.03f;
             const float ty = 0.45f;
             Gl.glPushMatrix();
-            Gl.glTranslatef(tx, Posy, 0);
+            Gl.glTranslatef(tx, gaPosy, 0);
 
             //corpo
             Gl.glColor3f(0f, 0.0f, 0f);
@@ -319,8 +320,17 @@ namespace Trab_Jaqueline_OpenGl
         {
             // if(key == GLUT_KEY_UP)      { }
             // if(key == GLUT_KEY_DOWN)    { }
-            if (key == Glut.GLUT_KEY_LEFT) { gbPosy -= 0.05f; }
-            if (key == Glut.GLUT_KEY_RIGHT) { gbPosy += 0.05f; }
+            if (key == Glut.GLUT_KEY_DOWN) { gbPosy -= 0.03f; }
+            if (key == Glut.GLUT_KEY_UP) { gbPosy += 0.03f; }
+            Glut.glutPostRedisplay();
+        }
+
+        static void moverGoleiroAlemanha(byte key, int x, int y)
+        {
+
+            if (key == 119) { gaPosy += 0.03f; }  //Tecla 0 
+            if (key == 115) { gaPosy -= 0.03f; }  //Tecla 1 
+             
             Glut.glutPostRedisplay();
         }
 
