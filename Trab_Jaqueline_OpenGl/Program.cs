@@ -297,40 +297,64 @@ namespace Trab_Jaqueline_OpenGl
             } while (cont <= quantidade);
         }
 
-        //static void bola()
-        //{
-        //    float auxX, auxY;
-        //    auxX = tx + ((tx + 0.05f) - tx) / 2;
-        //    auxY = (ty + 0.055f);
-        //    ponto = (2 * PI) / 500;
-        //    raio = 0.033f;
-        //    Gl.glColor3f(cor[0], cor[1], cor[2]);
-        //    Gl.glBegin(Gl.GL_TRIANGLE_FAN);
-        //    Gl.glVertex2f(auxX, auxY);
-        //    for (float angulo = 0; angulo < (2 * PI); angulo += ponto)
-        //    {
-        //        x = (float)(raio * Math.Cos(angulo) + auxX);
-        //        y = (float)(raio * Math.Sin(angulo) + auxY);
-        //        Gl.glVertex2f(x, y);
-        //    }
-        //    Gl.glEnd();
-        //}
+        static void bola()
+        {
+            ponto = (2 * PI) / 500;
+            raio = 0.05f;
+            Gl.glColor3f(1f, 1f, 1f);
+            Gl.glBegin(Gl.GL_TRIANGLE_FAN);
+            for (float angulo = 0; angulo < (2 * PI); angulo += ponto)
+            {
+                x = (float)(raio * Math.Cos(angulo) + 0.5f);
+                y = (float)(raio * Math.Sin(angulo) + 0.5f);
+                Gl.glVertex2f(x, y);
+            }
+            Gl.glEnd();
+        }
 
         static void moverGoleiroBrasil(int key, int x, int y)
         {
-            // if(key == GLUT_KEY_UP)      { }
-            // if(key == GLUT_KEY_DOWN)    { }
-            if (key == Glut.GLUT_KEY_DOWN) { gbPosy -= 0.03f; }
-            if (key == Glut.GLUT_KEY_UP) { gbPosy += 0.03f; }
+           
+            if (key == Glut.GLUT_KEY_DOWN)
+            {
+                gbPosy -= 0.03f;
+                if (gbPosy< -0.30f)
+                {
+                    gbPosy = -0.30f;
+                } }
+
+            if (key == Glut.GLUT_KEY_UP)
+            {
+                gbPosy += 0.03f;
+                if (gbPosy>0.30f)
+                {
+                    gbPosy = 0.30f;
+                } }
+
+            
             Glut.glutPostRedisplay();
         }
 
         static void moverGoleiroAlemanha(byte key, int x, int y)
         {
 
-            if (key == 119) { gaPosy += 0.03f; }  //Tecla 0 
-            if (key == 115) { gaPosy -= 0.03f; }  //Tecla 1 
-             
+            if (key == 115 || key == 83)
+            {
+                gaPosy -= 0.03f;
+                if (gaPosy < -0.30f)
+                {
+                    gaPosy = -0.30f;
+                }
+            }
+
+            if (key == 119 || key== 87)
+            {
+                gaPosy += 0.03f;
+                if (gaPosy > 0.30f)
+                {
+                    gaPosy = 0.30f;
+                }
+            }
             Glut.glutPostRedisplay();
         }
 
