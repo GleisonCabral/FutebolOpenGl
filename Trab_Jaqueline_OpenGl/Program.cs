@@ -8,14 +8,14 @@ using Tao.OpenGl;
 
 namespace Trab_Jaqueline_OpenGl
 {
-    
-     class Program
+
+    class Program
     {
         #region Variaveis de configuração do centro do campo
-
-        static float ponto , raio ,x, y;
+        static float ponto, raio, x, y;
         const float PI = 3.14159265358f;
         static float[] Novacor;
+        static float gbPosy = 0.0f;
         #endregion
 
         static void Main(string[] args)
@@ -28,13 +28,14 @@ namespace Trab_Jaqueline_OpenGl
             Glut.glutCreateWindow("Copa do Mundo");
             inicialize();
             Glut.glutDisplayFunc(desenhar);
+            Glut.glutSpecialFunc(moverGoleiroBrasil);
             Glut.glutMainLoop();
         }
 
         static void cenaCampo()
         {
             //Gramado
-            Gl.glColor3f(0.0f, 0.5f,0.0f);
+            Gl.glColor3f(0.0f, 0.5f, 0.0f);
             Gl.glBegin(Gl.GL_QUADS);
             Gl.glVertex2f(0f, 0f);
             Gl.glVertex2f(1f, 0f);
@@ -65,7 +66,7 @@ namespace Trab_Jaqueline_OpenGl
             raio = 0.02f;
             Gl.glColor3f(1f, 1f, 1f);
             Gl.glBegin(Gl.GL_TRIANGLE_FAN);
-            for (float angulo = 0; angulo < (2*PI); angulo+=ponto)
+            for (float angulo = 0; angulo < (2 * PI); angulo += ponto)
             {
                 x = (float)(raio * Math.Cos(angulo) + 0.5f);
                 y = (float)(raio * Math.Sin(angulo) + 0.5f);
@@ -134,8 +135,16 @@ namespace Trab_Jaqueline_OpenGl
             Gl.glColor3f(1.0f, 0.0f, 1.0f);
             Gl.glBegin(Gl.GL_LINES);
             Gl.glVertex2f(0.05f, 0.35f);
-            Gl.glVertex2f(0.05f,0.65f);
+            Gl.glVertex2f(0.05f, 0.65f);
             Gl.glEnd();
+            
+            //Jogadores da Alemanha
+            Novacor = new float[3] { 0.87f, 0f, 0f };
+            Jogadores(2, Novacor, 0.06f, 0.75f);
+
+            //Jogadores do Brasil
+            Novacor = new float[3] { 1f, 0.87f, 0f };
+            Jogadores(2, Novacor, 0.25f, 0.87f);
 
             //Gol direito
             Gl.glLineWidth(15);
@@ -160,58 +169,161 @@ namespace Trab_Jaqueline_OpenGl
 
         static void desenhar()
         {
+            
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
             cenaCampo();
-            Novacor = new float[3] { 0.67f, 0.85f, 1f };
-            Jogadores(12,Novacor,0.07f,0.47f);
-            Novacor = new float[3] { 1.0f, 0.87f, 0f };
-            Jogadores(12, Novacor, 0.07f, 0.87f);
+            Novacor = new float[3] { 0.87f, 0f, 0f };
+            goleiroAlemanha(0f, Novacor);
+            Novacor = new float[3] { 1f, 0.87f, 0f };
+            goleiroBrasil(Novacor);
             Glut.glutSwapBuffers();
         }
 
-        static void Jogadores(int quantidade,float[] cor, float valueMin, float valueMax)
+        static void jogador(float tx, float ty, float[] cor)
         {
-            
+           
+            //corpo
+            Gl.glColor3f(0f, 0.0f, 0f);
+            Gl.glBegin(Gl.GL_QUADS);
+            Gl.glVertex2f(tx, ty);
+            Gl.glVertex2f((tx + 0.05f), ty);
+            Gl.glVertex2f((tx + 0.05f), (ty + 0.025f));
+            Gl.glVertex2f(tx, (ty + 0.025f));
+            Gl.glEnd();
+
+            //Cabeça
+
+            float auxX, auxY;
+            auxX = tx + ((tx + 0.05f) - tx) / 2;
+            auxY = (ty + 0.055f);
+            ponto = (2 * PI) / 500;
+            raio = 0.033f;
+            Gl.glColor3f(cor[0], cor[1], cor[2]);
+            Gl.glBegin(Gl.GL_TRIANGLE_FAN);
+            Gl.glVertex2f(auxX, auxY);
+            for (float angulo = 0; angulo < (2 * PI); angulo += ponto)
+            {
+                x = (float)(raio * Math.Cos(angulo) + auxX);
+                y = (float)(raio * Math.Sin(angulo) + auxY);
+                Gl.glVertex2f(x, y);
+            }
+            Gl.glEnd();
+        }
+
+        static void goleiroAlemanha(float Posy, float[] cor)
+        {
+            const float tx = 0.03f;
+            const float ty = 0.45f;
+            Gl.glPushMatrix();
+            Gl.glTranslatef(tx, Posy, 0);
+
+            //corpo
+            Gl.glColor3f(0f, 0.0f, 0f);
+            Gl.glBegin(Gl.GL_QUADS);
+            Gl.glVertex2f(tx, ty);
+            Gl.glVertex2f((tx + 0.05f), ty);
+            Gl.glVertex2f((tx + 0.05f), (ty + 0.025f));
+            Gl.glVertex2f(tx, (ty + 0.025f));
+            Gl.glEnd();
+
+            //Cabeça
+
+            float auxX, auxY;
+            auxX = tx + ((tx + 0.05f) - tx) / 2;
+            auxY = (ty + 0.055f);
+            ponto = (2 * PI) / 500;
+            raio = 0.033f;
+            Gl.glColor3f(cor[0], cor[1], cor[2]);
+            Gl.glBegin(Gl.GL_TRIANGLE_FAN);
+            Gl.glVertex2f(auxX, auxY);
+            for (float angulo = 0; angulo < (2 * PI); angulo += ponto)
+            {
+                x = (float)(raio * Math.Cos(angulo) + auxX);
+                y = (float)(raio * Math.Sin(angulo) + auxY);
+                Gl.glVertex2f(x, y);
+            }
+            Gl.glEnd();
+            Gl.glPopMatrix();
+        }
+
+        static void goleiroBrasil(float[] cor)
+        {
+            const float tx = 0.44f;
+            const float ty = 0.45f;
+            Gl.glPushMatrix();
+            Gl.glTranslatef(tx, gbPosy, 0);
+
+            //corpo
+            Gl.glColor3f(0f, 0.0f, 0f);
+            Gl.glBegin(Gl.GL_QUADS);
+            Gl.glVertex2f(tx, ty);
+            Gl.glVertex2f((tx + 0.05f), ty);
+            Gl.glVertex2f((tx + 0.05f), (ty + 0.025f));
+            Gl.glVertex2f(tx, (ty + 0.025f));
+            Gl.glEnd();
+
+            //Cabeça
+            float auxX, auxY;
+            auxX = tx + ((tx + 0.05f) - tx) / 2;
+            auxY = (ty + 0.055f);
+            ponto = (2 * PI) / 500;
+            raio = 0.033f;
+            Gl.glColor3f(cor[0], cor[1], cor[2]);
+            Gl.glBegin(Gl.GL_TRIANGLE_FAN);
+            Gl.glVertex2f(auxX, auxY);
+            for (float angulo = 0; angulo < (2 * PI); angulo += ponto)
+            {
+                x = (float)(raio * Math.Cos(angulo) + auxX);
+                y = (float)(raio * Math.Sin(angulo) + auxY);
+                Gl.glVertex2f(x, y);
+            }
+            Gl.glEnd();
+            Gl.glPopMatrix();
+        }
+
+        static void Jogadores(int quantidade, float[] cor, float valueMin, float valueMax)
+        {
+
             int cont = 0;
             float tx, ty;
             Random randon = new Random();
             do
             {
-
-                tx = (float)randon.NextDouble(valueMin,valueMax);
+                tx = (float)randon.NextDouble(valueMin, valueMax);
                 ty = (float)randon.NextDouble(0.07f, 0.87f);
-
-                //corpo
-                Gl.glColor3f(0f, 0.0f, 0f);
-                Gl.glBegin(Gl.GL_QUADS);
-                Gl.glVertex2f(tx, ty);
-                Gl.glVertex2f((tx + 0.05f), ty);
-                Gl.glVertex2f((tx + 0.05f), (ty + 0.025f));
-                Gl.glVertex2f(tx, (ty + 0.025f));
-                Gl.glEnd();
-
-                //Cabeça
-
-                float auxX, auxY;
-                auxX = tx + ((tx + 0.05f) - tx) / 2;
-                auxY = (ty + 0.055f);
-                ponto = (2 * PI) / 500;
-                raio = 0.033f;
-                Gl.glColor3f(cor[0],cor[1], cor[2]);
-                Gl.glBegin(Gl.GL_TRIANGLE_FAN);
-                Gl.glVertex2f(auxX, auxY);
-                for (float angulo = 0; angulo < (2 * PI); angulo += ponto)
-                {
-                    x = (float)(raio * Math.Cos(angulo) + auxX);
-                    y = (float)(raio * Math.Sin(angulo) + auxY);
-                    Gl.glVertex2f(x, y);
-                }
-                Gl.glEnd();
+                jogador(tx, ty, cor);
                 cont++;
-            } while (cont<=quantidade);
+            } while (cont <= quantidade);
         }
 
-       
+        //static void bola()
+        //{
+        //    float auxX, auxY;
+        //    auxX = tx + ((tx + 0.05f) - tx) / 2;
+        //    auxY = (ty + 0.055f);
+        //    ponto = (2 * PI) / 500;
+        //    raio = 0.033f;
+        //    Gl.glColor3f(cor[0], cor[1], cor[2]);
+        //    Gl.glBegin(Gl.GL_TRIANGLE_FAN);
+        //    Gl.glVertex2f(auxX, auxY);
+        //    for (float angulo = 0; angulo < (2 * PI); angulo += ponto)
+        //    {
+        //        x = (float)(raio * Math.Cos(angulo) + auxX);
+        //        y = (float)(raio * Math.Sin(angulo) + auxY);
+        //        Gl.glVertex2f(x, y);
+        //    }
+        //    Gl.glEnd();
+        //}
+
+        static void moverGoleiroBrasil(int key, int x, int y)
+        {
+            // if(key == GLUT_KEY_UP)      { }
+            // if(key == GLUT_KEY_DOWN)    { }
+            if (key == Glut.GLUT_KEY_LEFT) { gbPosy -= 0.05f; }
+            if (key == Glut.GLUT_KEY_RIGHT) { gbPosy += 0.05f; }
+            Glut.glutPostRedisplay();
+        }
+
     }
 
     #region ClasseNumeroRandomicoFloat
