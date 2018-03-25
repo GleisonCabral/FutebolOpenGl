@@ -17,6 +17,9 @@ namespace Trab_Jaqueline_OpenGl
         static float[] Novacor;             // Vetor para nova cor.@@
         static float gbPosy = 0.0f;         // Posição do goleiro do Brasil.@@
         static float gaPosy = 0.0f;         // Posição do goleiro da Alemanha.@@
+        static float rot = 0.0f;            // variavel que controla a rotação da bola.@@
+        static float transX = 0.0f;         // Variavel de translação posição X.@@
+        static float transY = 0.0f;         // Variavel de translação posição Y.@@;
         #endregion
 
         static void Main(string[] args)
@@ -31,7 +34,9 @@ namespace Trab_Jaqueline_OpenGl
             Glut.glutDisplayFunc(desenhar);
             Glut.glutSpecialFunc(moverGoleiroBrasil);
             Glut.glutKeyboardFunc(new Glut.KeyboardCallback(moverGoleiroAlemanha));
+            Glut.glutTimerFunc(100, Timer, 1);
             Glut.glutMainLoop();
+
         }
 
         static void cenaCampo()
@@ -177,6 +182,7 @@ namespace Trab_Jaqueline_OpenGl
             goleiroAlemanha(Novacor);
             Novacor = new float[3] { 1f, 0.87f, 0f };
             goleiroBrasil(Novacor);
+            bola();
             Glut.glutSwapBuffers();
         }
 
@@ -299,17 +305,22 @@ namespace Trab_Jaqueline_OpenGl
 
         static void bola()
         {
+            transY = 0.0f;
+            Gl.glPushMatrix();
+            Gl.glRotatef(rot, 0.0f, 0f, 0.0f);
+            Gl.glTranslatef(transX, transY, 0f);
             ponto = (2 * PI) / 500;
-            raio = 0.05f;
-            Gl.glColor3f(1f, 1f, 1f);
+            raio = 0.025f;
+            Gl.glColor3f(0f, 0.40f, 1f);
             Gl.glBegin(Gl.GL_TRIANGLE_FAN);
             for (float angulo = 0; angulo < (2 * PI); angulo += ponto)
             {
-                x = (float)(raio * Math.Cos(angulo) + 0.5f);
+                x = (float)(raio * Math.Cos(angulo) + 0.49f);
                 y = (float)(raio * Math.Sin(angulo) + 0.5f);
                 Gl.glVertex2f(x, y);
             }
             Gl.glEnd();
+            Gl.glPopMatrix();
         }
 
         static void moverGoleiroBrasil(int key, int x, int y)
@@ -358,7 +369,25 @@ namespace Trab_Jaqueline_OpenGl
             Glut.glutPostRedisplay();
         }
 
+        static void Timer(int value)
+        {
+            colisaoGoleiro();
+            rot -= 0.01f;
+            Glut.glutPostRedisplay();
+            Glut.glutTimerFunc(100, Timer, 1);
+        }
+
+        static void colisaoGoleiro()
+        {
+            if (true)
+            {
+
+            }
+        }
+
     }
+
+   
 
     #region ClasseNumeroRandomicoFloat
 
