@@ -25,7 +25,6 @@ namespace Trab_Jaqueline_OpenGl
         static string jogador2;                 // Variavel nome do Jogador2@@
         static int pontoJogador1 = 0;           // Contador pontos jogador1.@@
         static int pontoJogador2 = 0;           // Contador pontos jogador2.@@
-
         #endregion
 
         static void Main(string[] args)
@@ -363,23 +362,31 @@ namespace Trab_Jaqueline_OpenGl
 
         static void moverGoleiroAlemanha(byte key, int x, int y)
         {
+            
 
             if (key == 115 || key == 83)
             {
-               gaPosy -= 0.03f;
                 if (gaPosy < -0.30f)
                 {
-                    gaPosy = -0.30f;
+                    gaPosy += 0.0f;
                 }
+                else
+                {
+                    gaPosy -= 0.03f;
+                }
+
             }
             
 
             if (key == 119 || key== 87)
             {
-                gaPosy += 0.03f;
                 if (gaPosy > 0.30f)
                 {
-                    gaPosy = 0.30f;
+                    gaPosy += 0.0f;
+                }
+                else
+                {
+                    gaPosy += 0.03f;
                 }
             }
             Glut.glutPostRedisplay();
@@ -396,24 +403,29 @@ namespace Trab_Jaqueline_OpenGl
 
         static void Colisao()
         {
+            //Comparação de colisão goleiro do Brasil.@@
             if ((transX>=0.35f && (transY==gbPosy))&& controleColisao==true)
             {
                 controleColisao = false;
             }
-            else
+
+            //Conparação para a pontuação jogador 2.@@
+            if (transX <-0.5f && (transY > -0.35f || (transY < -0.65f)))
             {
-                pontoJogador1++;
+                pontoJogador2++;
+                transX = 0f;
+                gaPosy = 0.0f;
             }
 
+            //Comparação colisão goleiro Alemanha.@@
             if ((transX <= -0.35f && (transY == gaPosy) && controleColisao == false))
             {
                 controleColisao = true;
             }
-            else
-            {
-                pontoJogador2++;
-            }
 
+            
+
+            //Controle de direção da bola.@@
             if (controleColisao)
             {
                 transX += 0.01f;
