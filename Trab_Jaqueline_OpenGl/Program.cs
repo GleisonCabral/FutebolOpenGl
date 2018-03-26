@@ -12,14 +12,16 @@ namespace Trab_Jaqueline_OpenGl
     class Program
     {
         #region Variaveis de configuração do centro do campo
-        static float ponto, raio, x, y;     // Variaveis do valor de ponto, raio e posição.@@
-        const float PI = 3.14159265358f;    // Variavel valor do PI, para as circunferências.@@
-        static float[] Novacor;             // Vetor para nova cor.@@
-        static float gbPosy = 0.0f;         // Posição do goleiro do Brasil.@@
-        static float gaPosy = 0.0f;         // Posição do goleiro da Alemanha.@@
-        static float rot = 0.0f;            // variavel que controla a rotação da bola.@@
-        static float transX = 0.0f;         // Variavel de translação posição X.@@
-        static float transY = 0.0f;         // Variavel de translação posição Y.@@;
+        static float ponto, raio, x, y;         // Variaveis do valor de ponto, raio e posição.@@
+        const float PI = 3.14159265358f;        // Variavel valor do PI, para as circunferências.@@
+        static float[] Novacor;                 // Vetor para nova cor.@@
+        static float gbPosy = 0.0f;             // Posição do goleiro do Brasil.@@
+        static float gaPosy = 0.0f;             // Posição do goleiro da Alemanha.@@
+        static float rot = 0.0f;                // variavel que controla a rotação da bola.@@
+        static float transX = 0.0f;             // Variavel de translação posição X.@@
+        static float transY = 0.0f;             // Variavel de translação posição Y.@@;
+        static bool controleColisao = false;    // Controla as colisões.@@
+
         #endregion
 
         static void Main(string[] args)
@@ -371,21 +373,27 @@ namespace Trab_Jaqueline_OpenGl
 
         static void Timer(int value)
         {
-            colisaoGoleiro();
-            rot -= 0.01f;
+          
+            Colisao();
             Glut.glutPostRedisplay();
             Glut.glutTimerFunc(100, Timer, 1);
         }
 
-        static void colisaoGoleiro()
-        {
-            if (true)
-            {
 
+        static void Colisao()
+        {
+            if ((transX>=0.45f && (transY==gbPosy)))
+            {
+                transX += 0f;
+            }
+            else
+            {
+                transX += 0.01f;
             }
         }
 
-    }
+
+    }//Fim Programa
 
    
 
