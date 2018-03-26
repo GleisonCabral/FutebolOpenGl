@@ -20,12 +20,22 @@ namespace Trab_Jaqueline_OpenGl
         static float rot = 0.0f;                // variavel que controla a rotação da bola.@@
         static float transX = 0.0f;             // Variavel de translação posição X.@@
         static float transY = 0.0f;             // Variavel de translação posição Y.@@;
-        static bool controleColisao = false;    // Controla as colisões.@@
+        static bool controleColisao = true;     // Controla as colisões.@@
+        static string jogador1;                 // Variavel nome do Jogador1@@
+        static string jogador2;                 // Variavel nome do Jogador2@@
+        static int pontoJogador1 = 0;           // Contador pontos jogador1.@@
+        static int pontoJogador2 = 0;           // Contador pontos jogador2.@@
 
         #endregion
 
         static void Main(string[] args)
         {
+
+            Console.Write("Futebol 2D");
+            Console.WriteLine("Informe o nome do Primeiro Jogador: ");
+            jogador1 = Console.ReadLine();
+            Console.WriteLine("Informe o nome do segundo jogador: ");
+            jogador2 = Console.ReadLine();
 
             Glut.glutInit();
             Glut.glutInitDisplayMode(Glut.GLUT_SINGLE | Glut.GLUT_RGB);
@@ -146,14 +156,7 @@ namespace Trab_Jaqueline_OpenGl
             Gl.glVertex2f(0.05f, 0.35f);
             Gl.glVertex2f(0.05f, 0.65f);
             Gl.glEnd();
-            
-            ////Jogadores da Alemanha
-            //Novacor = new float[3] { 0.87f, 0f, 0f };
-            //Jogadores(2, Novacor, 0.06f, 0.75f);
-
-            ////Jogadores do Brasil
-            //Novacor = new float[3] { 1f, 0.87f, 0f };
-            //Jogadores(2, Novacor, 0.25f, 0.87f);
+         
 
             //Gol direito
             Gl.glLineWidth(15);
@@ -180,6 +183,16 @@ namespace Trab_Jaqueline_OpenGl
             
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
             cenaCampo();
+
+            Gl.glColor3f(1f, 1f, 1f);
+            float j1 = (0.5f-(float)(jogador1.Length + pontoJogador1.ToString().Length + 5)/100);
+            Gl.glRasterPos2f(j1, 0.9f);
+            Glut.glutBitmapString(Glut.GLUT_BITMAP_HELVETICA_18, jogador1 +" "+pontoJogador1);
+
+            Gl.glRasterPos2f(0.53f, 0.9f);
+            Glut.glutBitmapString(Glut.GLUT_BITMAP_HELVETICA_18, jogador2 + " " + pontoJogador2);
+
+            // Glut.glutBitmapString(Glut.GLUT_BITMAP_HELVETICA_18, "Jogador 1");
             Novacor = new float[3] { 0.87f, 0f, 0f };
             goleiroAlemanha(Novacor);
             Novacor = new float[3] { 1f, 0.87f, 0f };
@@ -353,12 +366,13 @@ namespace Trab_Jaqueline_OpenGl
 
             if (key == 115 || key == 83)
             {
-                gaPosy -= 0.03f;
+               gaPosy -= 0.03f;
                 if (gaPosy < -0.30f)
                 {
                     gaPosy = -0.30f;
                 }
             }
+            
 
             if (key == 119 || key== 87)
             {
@@ -382,13 +396,32 @@ namespace Trab_Jaqueline_OpenGl
 
         static void Colisao()
         {
-            if ((transX>=0.45f && (transY==gbPosy)))
+            if ((transX>=0.35f && (transY==gbPosy))&& controleColisao==true)
             {
-                transX += 0f;
+                controleColisao = false;
             }
             else
             {
+                pontoJogador1++;
+            }
+
+            if ((transX <= -0.35f && (transY == gaPosy) && controleColisao == false))
+            {
+                controleColisao = true;
+            }
+            else
+            {
+                pontoJogador2++;
+            }
+
+            if (controleColisao)
+            {
                 transX += 0.01f;
+                
+            }
+            else
+            {
+                transX -= 0.01f;
             }
         }
 
